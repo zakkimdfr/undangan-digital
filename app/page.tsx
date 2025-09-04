@@ -30,17 +30,18 @@ import { Textarea } from "@/components/ui/textarea";
 
 const CONFIG = {
   couple: {
-    bride: { name: "Aisyah Nur", parents: "Putri dari Bapak Ahmad & Ibu Siti" },
-    groom: { name: "Muhammad Yusuf", parents: "Putra dari Bapak Ali & Ibu Fatimah" },
-    hashtag: "#AisyahYusufForever",
+    bride: { name: "Salma Raudhatuljannati", parents: "Putri Keduadari Bapak H. Tedi Setiadi & Ibu Hj. Elly Nurlaely" },
+    groom: { name: "Zakki Mudhoffar", parents: "Putra Ketiga dari Bapak H. Yusuf Badri & Ibu Hj. Hafifah Rahmi P." },
+    hashtag: "#KiSahSelamanya",
     cover: "/cover.jpg",
   },
   events: [
-    { type: "Akad Nikah", date: "2025-10-12", time: "08:00 - 10:00 WIB", address: "Masjid Agung Al-Ikhlas, Jl. Merpati No. 12, Bandung", mapUrl: "https://maps.google.com/?q=Masjid+Agung+Al-Ikhlas+Bandung" },
-    { type: "Resepsi", date: "2025-10-12", time: "11:00 - 15:00 WIB", address: "Gedung Serbaguna Nusa, Jl. Kenanga No. 5, Bandung", mapUrl: "https://maps.google.com/?q=Gedung+Serbaguna+Nusa+Bandung" },
+    { type: "Akad Nikah", date: "2025-08-23", address: "Telah dilaksanakan di ISTANA MUARA Jl. Muara Baru No.8, Situsaeur, Kec. Bojongloa Kidul, Kota Bandung, Jawa Barat 40234" },
+    { type: "Tausiyah", date: "2025-09-14", time: "09:00 - 10:00 WIB", address: "Ust. Dr. H. Haris Muslim, Lc. MA\nGedung Haji Qornul Manazil, Jl. Ciganitri No. 2, Bojongsoang, Kab. Bandung 40287 ", mapUrl: "https://maps.app.goo.gl/FfmFUkKpT8PVXDhCA" },
+    { type: "Resepsi", date: "2025-09-14", time: "10:00 - 14:00 WIB", address: "Gedung Haji Qornul Manazil, Jl. Cganitri No. 2, Bojongsoang, Kab. Bandung 40287 ", mapUrl: "https://maps.app.goo.gl/FfmFUkKpT8PVXDhCA" },
   ],
   rsvp: { enabled: true, endpoint: "/api/rsvp" },
-  gift: { enabled: true, accounts: [ { bank: "BCA", name: "Aisyah Nur", number: "1234567890" }, { bank: "Mandiri", name: "Muhammad Yusuf", number: "9876543210" } ], address: "Jalan Mawar No. 10, Bandung 40123" },
+  gift: { enabled: true, accounts: [{ bank: "Jago Syariah", name: "Salma Raudhatuljannati", number: "503812872434" }, { bank: "Mandiri", name: "Zakki Mudhoffar", number: "1300020975309" }], address: "Jl. Ciganitri No. 13 RT01/RW04, Cipagalo, Bojongsoang, Kab. Bandung 40287" },
   gallery: { enabled: true, images: [] /* fallback: will fetch from Supabase if configured */ },
   music: { autoplay: false, src: "/music.mp3" },
 };
@@ -85,7 +86,7 @@ function CopyBadge({ text, className = "" }: { text: string; className?: string 
           await navigator.clipboard.writeText(text);
           setCopied(true);
           setTimeout(() => setCopied(false), 1500);
-        } catch {}
+        } catch { }
       }}
     >
       {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />} {copied ? "Disalin" : "Salin"}
@@ -137,7 +138,7 @@ export default function WeddingInvite() {
 
   useEffect(() => {
     if (CONFIG.music.autoplay && audioRef.current) {
-      audioRef.current.play().catch(() => {});
+      audioRef.current.play().catch(() => { });
       setPlaying(true);
     }
   }, []);
@@ -165,16 +166,29 @@ export default function WeddingInvite() {
     async function fetchGallery() {
       if (!supabase) return;
       try {
-        const { data, error } = await supabase.from("gallery").select("path").order("uploaded_at", { ascending: false }).limit(12);
-        if (error) return;
-        const urls = data.map((d: any) => supabase.storage.from("gallery").getPublicUrl(d.path).publicURL);
+        const { data, error } = await supabase
+          .from("gallery")
+          .select("path")
+          .order("uploaded_at", { ascending: false })
+          .limit(12);
+
+        if (error || !data) return;
+
+        const urls = data.map((d: any) => {
+          const { data: urlData } = supabase.storage
+            .from("gallery")
+            .getPublicUrl(d.path);
+          return urlData.publicUrl;
+        });
+
         setGallery(urls);
       } catch (e) {
-        // ignore
+        console.error("Error fetchGallery:", e);
       }
     }
     fetchGallery();
   }, []);
+
 
   const firstEventDate = CONFIG.events[0]?.date || new Date().toISOString().slice(0, 10);
 
@@ -236,7 +250,7 @@ export default function WeddingInvite() {
           <Button size="icon" className="rounded-full shadow-lg" onClick={() => {
             const a = audioRef.current;
             if (!a) return;
-            if (playing) { a.pause(); setPlaying(false); } else { a.play().catch(() => {}); setPlaying(true); }
+            if (playing) { a.pause(); setPlaying(false); } else { a.play().catch(() => { }); setPlaying(true); }
           }}>
             <Music2 className="h-5 w-5" />
           </Button>
@@ -260,25 +274,47 @@ export default function WeddingInvite() {
         </Card>
       </Section>
 
-      {/* EVENTS */}
-      <Section id="events" title="Detail Acara" icon={<MapPin className="h-5 w-5" />}>
-        <div className="grid md:grid-cols-2 gap-4">
-          {CONFIG.events.map((ev, i) => (
-            <Card key={i} className="rounded-2xl">
-              <CardContent className="p-6 space-y-3">
-                <div className="text-sm uppercase tracking-widest opacity-70">{ev.type}</div>
-                <div className="text-lg font-medium">{new Date(ev.date).toLocaleDateString("id-ID", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}</div>
-                <div className="text-sm opacity-80">{ev.time}</div>
-                <p className="text-sm">{ev.address}</p>
-                <div className="flex gap-2">
-                  <Button size="sm" variant="secondary" onClick={() => window.open(ev.mapUrl, "_blank")}>Buka Peta</Button>
-                  <CopyBadge text={ev.mapUrl} />
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </Section>
+     {/* EVENTS */}
+<Section id="events" title="Detail Acara" icon={<MapPin className="h-5 w-5" />}>
+  <div className="grid md:grid-cols-2 gap-4">
+    {CONFIG.events.map((ev, i) => (
+      <Card key={i} className="rounded-2xl">
+        <CardContent className="p-6 space-y-3">
+          <div className="text-sm uppercase tracking-widest opacity-70">{ev.type}</div>
+          <div className="text-lg font-medium">
+            {new Date(ev.date).toLocaleDateString("id-ID", {
+              weekday: "long",
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            })}
+          </div>
+
+          {/* Tampilkan waktu hanya jika ada */}
+          {ev.time && <div className="text-sm opacity-80">{ev.time}</div>}
+
+          {/* Pakai whitespace-pre-line agar \n jadi baris baru */}
+          <p className="text-sm whitespace-pre-line">{ev.address}</p>
+
+          {/* Tombol peta hanya jika ada mapUrl */}
+          {ev.mapUrl && (
+            <div className="flex gap-2">
+              <Button
+                size="sm"
+                variant="secondary"
+                onClick={() => window.open(ev.mapUrl!, "_blank")}
+              >
+                Buka Peta
+              </Button>
+              <CopyBadge text={ev.mapUrl} />
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    ))}
+  </div>
+</Section>
+
 
       {/* GALLERY */}
       {gallery.length > 0 && (
