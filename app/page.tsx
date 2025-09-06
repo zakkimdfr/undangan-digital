@@ -171,7 +171,9 @@ export default function WeddingInvite() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [playing, setPlaying] = useState(false);
 
-  const [gallery, setGallery] = useState<string[]>(CONFIG.gallery.images.slice(0, 6));
+  const [gallery, setGallery] = useState<string[]>(
+    CONFIG.gallery.images.slice(0, 6)
+  );
 
   // autoplay music
   useEffect(() => {
@@ -213,35 +215,40 @@ export default function WeddingInvite() {
   const firstEventDate = "2025-09-14T00:09:00";
 
   async function submitRSVP() {
-  setSending(true);
+    setSending(true);
 
-  try {
-    const appsUrl = process.env.NEXT_PUBLIC_APPSCRIPT_URL;
+    try {
+      const appsUrl = process.env.NEXT_PUBLIC_APPSCRIPT_URL;
 
-    if (appsUrl && typeof appsUrl === "string" && appsUrl.startsWith("http")) {
-      const payload = { ...rsvp, timestamp: new Date().toISOString() };
-      const res = await fetch(appsUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      if (
+        appsUrl &&
+        typeof appsUrl === "string" &&
+        appsUrl.startsWith("http")
+      ) {
+        const payload = { ...rsvp, timestamp: new Date().toISOString() };
+        const res = await fetch(appsUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
 
-      const j = await res.json();
-      if (j.success !== false) setSent(true);
-    } else {
-      console.warn("Apps Script URL tidak ditemukan, menyimpan ke localStorage");
-      const queue = JSON.parse(localStorage.getItem("rsvp_local") || "[]");
-      queue.push({ ...rsvp, timestamp: new Date().toISOString() });
-      localStorage.setItem("rsvp_local", JSON.stringify(queue));
-      setSent(true);
+        const j = await res.json();
+        if (j.success !== false) setSent(true);
+      } else {
+        console.warn(
+          "Apps Script URL tidak ditemukan, menyimpan ke localStorage"
+        );
+        const queue = JSON.parse(localStorage.getItem("rsvp_local") || "[]");
+        queue.push({ ...rsvp, timestamp: new Date().toISOString() });
+        localStorage.setItem("rsvp_local", JSON.stringify(queue));
+        setSent(true);
+      }
+    } catch (e) {
+      console.error("Error submitRSVP:", e);
+    } finally {
+      setSending(false);
     }
-  } catch (e) {
-    console.error("Error submitRSVP:", e);
-  } finally {
-    setSending(false);
   }
-}
-
 
   const shareUrl = typeof window !== "undefined" ? window.location.href : "";
 
@@ -265,51 +272,51 @@ export default function WeddingInvite() {
           style={{ y }}
           className="relative h-[70vh] w-full overflow-hidden"
         >
-          <Image
-            src={CONFIG.couple.cover}
-            alt="cover"
-            className="absolute inset-0 h-full w-full object-cover"
-          />
+          <div className="relative h-[70vh] w-full overflow-hidden">
+            <Image
+              src={CONFIG.couple.cover}
+              alt="cover"
+              fill
+              className="object-cover"
+              priority
+            />
+          </div>
+
           <div className="absolute inset-0 bg-black/40" />
           <div className="relative z-10 h-full flex flex-col items-center justify-center text-center text-white px-4">
             <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
+              style={{ y }}
+              className="relative h-[70vh] w-full overflow-hidden"
             >
-              <div className="text-sm tracking-widest uppercase">
-                Undangan Pernikahan
-              </div>
-              <h1 className="text-4xl md:text-6xl font-semibold mt-2">
-                {CONFIG.couple.bride.name} & {CONFIG.couple.groom.name}
-              </h1>
-              <p className="mt-3 text-sm opacity-90">Kepada Yth. {guestName}</p>
-              <div className="mt-6 flex items-center justify-center gap-3">
-                <Button
-                  onClick={() =>
-                    document
-                      .getElementById("rsvp")
-                      ?.scrollIntoView({ behavior: "smooth" })
-                  }
-                  className="rounded-2xl px-5"
+              {/* Background Image */}
+              <Image
+                src={CONFIG.couple.cover}
+                alt="cover"
+                fill
+                className="object-cover"
+                priority
+              />
+              {/* Overlay gelap */}
+              <div className="absolute inset-0 bg-black/40 z-0" />
+
+              {/* Konten teks */}
+              <div className="relative z-10 h-full flex flex-col items-center justify-center text-center text-white px-4">
+                <motion.div
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6 }}
                 >
-                  <Users className="h-4 w-4 mr-2" /> RSVP
-                </Button>
-                <Button
-                  variant="secondary"
-                  onClick={() =>
-                    document
-                      .getElementById("events")
-                      ?.scrollIntoView({ behavior: "smooth" })
-                  }
-                  className="rounded-2xl px-5"
-                >
-                  <MapPin className="h-4 w-4 mr-2" /> Detail Acara
-                </Button>
-              </div>
-              <div className="mt-6 flex items-center justify-center gap-3 text-sm">
-                <Countdown targetDate={firstEventDate} />
-                <span className="opacity-80">{CONFIG.couple.hashtag}</span>
+                  <div className="text-sm tracking-widest uppercase">
+                    Undangan Pernikahan
+                  </div>
+                  <h1 className="text-4xl md:text-6xl font-semibold mt-2">
+                    {CONFIG.couple.bride.name} & {CONFIG.couple.groom.name}
+                  </h1>
+                  <p className="mt-3 text-sm opacity-90">
+                    Kepada Yth. {guestName}
+                  </p>
+                  {/* Tombol dsb */}
+                </motion.div>
               </div>
             </motion.div>
           </div>
@@ -350,7 +357,9 @@ export default function WeddingInvite() {
                 <Image
                   src={CONFIG.couple.bride.photo}
                   alt={CONFIG.couple.bride.name}
-                  className="w-40 h-40 mx-auto rounded-full object-cover shadow-lg"
+                  width={160}
+                  height={160}
+                  className="mx-auto rounded-full object-cover shadow-lg"
                 />
                 <h3 className="text-xl font-semibold">
                   {CONFIG.couple.bride.name}
@@ -375,11 +384,15 @@ export default function WeddingInvite() {
                 <Image
                   src={CONFIG.couple.groom.photo}
                   alt={CONFIG.couple.groom.name}
-                  className="w-40 h-40 mx-auto rounded-full object-cover shadow-lg"
+                  width={160}
+                  height={160}
+                  className="mx-auto rounded-full object-cover shadow-lg"
                 />
                 <h3 className="text-xl font-semibold">
                   {CONFIG.couple.groom.name}
                 </h3>
+                <p className="text-sm whitespace-pre-line">{}</p>
+
                 <p className="text-sm opacity-80">
                   {CONFIG.couple.groom.parents}
                 </p>
@@ -485,7 +498,7 @@ export default function WeddingInvite() {
                     <Input
                       placeholder="Nama lengkap"
                       value={rsvp.name}
-                      onChange={(e:  React.ChangeEvent<HTMLInputElement>) =>
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                         setRsvp({ ...rsvp, name: e.target.value })
                       }
                     />
@@ -496,7 +509,7 @@ export default function WeddingInvite() {
                       <Input
                         placeholder="08xxxxxxxxxx"
                         value={rsvp.phone}
-                        onChange={(e:  React.ChangeEvent<HTMLInputElement>) =>
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                           setRsvp({ ...rsvp, phone: e.target.value })
                         }
                       />
@@ -599,11 +612,14 @@ export default function WeddingInvite() {
                       className="p-4 rounded-xl border flex flex-col items-center text-center"
                     >
                       {/* Logo bank */}
-                      <Image
-                        src={a.logo}
-                        alt={a.bank}
-                        className="h-10 mb-2 object-contain"
-                      />
+                      <div className="relative w-20 h-10 mb-2">
+                        <Image
+                          src={a.logo}
+                          alt={a.bank}
+                          fill
+                          className="object-contain"
+                        />
+                      </div>
 
                       {/* Nama Bank */}
                       <div className="text-sm opacity-70">{a.bank}</div>

@@ -1,21 +1,21 @@
 const CONFIG = {
   hero: "https://cfsoedqtdrmqptfcudra.supabase.co/storage/v1/object/sign/assets/hero.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9mOGI5MGI1MS0wYzA1LTRkNTAtYmFkMS1jOWNiM2M4NWIzYTEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhc3NldHMvaGVyby5qcGciLCJpYXQiOjE3NTcxNDM4MjIsImV4cCI6MTc1OTczNTgyMn0.C978FosFbUG9BT0ckAuVL3-SjEi1cceR5244L6ZUuIU",
   couple: {
-    photo: "/couple.jpg",
+    photo: "https://cfsoedqtdrmqptfcudra.supabase.co/storage/v1/object/sign/assets/couple.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9mOGI5MGI1MS0wYzA1LTRkNTAtYmFkMS1jOWNiM2M4NWIzYTEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhc3NldHMvY291cGxlLmpwZyIsImlhdCI6MTc1NzE1OTU3MCwiZXhwIjoxNzg4Njk1NTcwfQ.m_1CZP2heBvBHRe0AZvaabO7NDYa-07s5JHbMaPjFvI",
     bride: {
       photo: "https://cfsoedqtdrmqptfcudra.supabase.co/storage/v1/object/sign/assets/bride.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9mOGI5MGI1MS0wYzA1LTRkNTAtYmFkMS1jOWNiM2M4NWIzYTEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhc3NldHMvYnJpZGUuanBnIiwiaWF0IjoxNzU3MTQzOTAxLCJleHAiOjE3ODg2Nzk5MDF9.NZrW6WLZkLwkR6PLKLCPgFQh9fyYkWRkzMX010y4_4U",
       name: "Salma Raudhatuljannati",
-      parents: "Putri Kedua dari Bapak H. Tedi Setiadi & Ibu Hj. Elly Nurlaely",
+      parents: "Putri Kedua dari\nBapak H. Tedi Setiadi & Ibu Hj. Elly Nurlaely",
       insta: "https://www.instagram.com/salmaardhtl/"
     },
     groom: {
-      photo: "/groom.jpg",
+      photo: "https://cfsoedqtdrmqptfcudra.supabase.co/storage/v1/object/sign/assets/groom.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9mOGI5MGI1MS0wYzA1LTRkNTAtYmFkMS1jOWNiM2M4NWIzYTEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhc3NldHMvZ3Jvb20uanBnIiwiaWF0IjoxNzU3MTU5NDA1LCJleHAiOjE3ODg2OTU0MDV9.fYXiFc-So2Dey9EsIvbnMwJVEKGRXIOncdA0IMKJC7Y",
       name: "Zakki Mudhoffar",
-      parents: "Putra Ketiga dari Bapak H. Yusuf Badri & Ibu Hj. Hafifah Rahmi P.",
+      parents: "Putra Ketiga dari\nBapak H. Yusuf Badri & Ibu Hj. Hafifah Rahmi P.",
       insta: "https://www.instagram.com/zakkimdfr/"
     },
     hashtag: "#KiSahSelamanya",
-    cover: "/cover.jpg",
+    cover: "https://cfsoedqtdrmqptfcudra.supabase.co/storage/v1/object/sign/assets/cover.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9mOGI5MGI1MS0wYzA1LTRkNTAtYmFkMS1jOWNiM2M4NWIzYTEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhc3NldHMvY292ZXIuanBnIiwiaWF0IjoxNzU3MTU5NDI1LCJleHAiOjE3ODg2OTU0MjV9.72LIffmHvlaRKLnuLZDa5cDyQC7MgkoSAF6GFAQk_1s",
   },
   events: [
     {
@@ -66,7 +66,7 @@ const CONFIG = {
     enabled: true,
     images: [],
   },
-  music: { autoplay: false, src: "/music.mp3" },
+  music: { autoplay: false, src: "https://cfsoedqtdrmqptfcudra.supabase.co/storage/v1/object/sign/assets/music.mp3?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9mOGI5MGI1MS0wYzA1LTRkNTAtYmFkMS1jOWNiM2M4NWIzYTEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhc3NldHMvbXVzaWMubXAzIiwiaWF0IjoxNzU3MTU5NzY2LCJleHAiOjE3ODg2OTU3NjZ9.dd02gKtPdXKNXh6TRjUOeBi8KbmGaLth0jS03uXdk0w" },
 };
 
 export default CONFIG;
