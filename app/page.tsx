@@ -17,7 +17,7 @@
  *  - set env vars in .env.local (see README note below)
  **********************************************/
 
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ReactNode, ReactElement } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import {
@@ -41,7 +41,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import CONFIG from "@/config";
 import Image from "next/image";
-import next from "next";
 
 interface SectionProps {
   id: string;
@@ -52,16 +51,16 @@ interface SectionProps {
 }
 
 // ---------------------- Helpers ----------------------
-function useQuery() {
-  const params = useMemo(
-    () =>
-      new URLSearchParams(
-        typeof window !== "undefined" ? window.location.search : ""
-      ),
-    []
-  );
-  return { get: (key: string) => params.get(key) };
-}
+// function useQuery() {
+//   const params = useMemo(
+//     () =>
+//       new URLSearchParams(
+//         typeof window !== "undefined" ? window.location.search : ""
+//       ),
+//     []
+//   );
+//   return { get: (key: string) => params.get(key) };
+// }
 
 function Countdown({ targetDate }: { targetDate: string }) {
   const [remaining, setRemaining] = useState<string>("");
@@ -154,9 +153,10 @@ const supabase = (() => {
 
 // ---------------------- Main Component ----------------------
 export default function WeddingInvite() {
-  const query = useQuery();
-  const guestSlug = query.get("to") || undefined;
-  const [guestName, setGuestName] = useState("Tamu Undangan");
+  // const query = useQuery();
+  // const guestSlug = query.get("to") || undefined;
+  // const [guestName, setGuestName] = useState("Tamu Undangan");
+  const guestName = "Tamu Undangan";
 
   const [rsvp, setRsvp] = useState({
     name: "",
@@ -347,7 +347,7 @@ export default function WeddingInvite() {
             <CardContent className="p-6 grid md:grid-cols-2 gap-6 items-center">
               {/* Bride */}
               <div className="space-y-2 text-center">
-                <img
+                <Image
                   src={CONFIG.couple.bride.photo}
                   alt={CONFIG.couple.bride.name}
                   className="w-40 h-40 mx-auto rounded-full object-cover shadow-lg"
@@ -372,7 +372,7 @@ export default function WeddingInvite() {
 
               {/* Groom */}
               <div className="space-y-2 text-center">
-                <img
+                <Image
                   src={CONFIG.couple.groom.photo}
                   alt={CONFIG.couple.groom.name}
                   className="w-40 h-40 mx-auto rounded-full object-cover shadow-lg"
@@ -531,7 +531,7 @@ export default function WeddingInvite() {
                     <select
                       className="w-full h-10 rounded-md border px-3"
                       value={rsvp.status}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                         setRsvp({ ...rsvp, status: e.target.value })
                       }
                     >
@@ -599,7 +599,7 @@ export default function WeddingInvite() {
                       className="p-4 rounded-xl border flex flex-col items-center text-center"
                     >
                       {/* Logo bank */}
-                      <img
+                      <Image
                         src={a.logo}
                         alt={a.bank}
                         className="h-10 mb-2 object-contain"
