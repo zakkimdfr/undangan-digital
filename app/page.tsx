@@ -18,6 +18,7 @@
  **********************************************/
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { ReactNode, ReactElement } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import {
   Gift,
@@ -34,15 +35,21 @@ import {
   Instagram,
 } from "lucide-react";
 import { createClient } from "@supabase/supabase-js";
-
-// shadcn/ui components (if not present, replace with native elements)
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import CONFIG from "@/config";
+import Image from "next/image";
+import next from "next";
 
-// ✅ CONFIG pindah ke file terpisah
-import CONFIG from "@/next.config";
+interface SectionProps {
+  id: string;
+  title: string;
+  icon?: ReactElement; // karena icon biasanya JSX <Icon />
+  children: ReactNode; // untuk konten dalam section
+  subtitle?: string;
+}
 
 // ---------------------- Helpers ----------------------
 function useQuery() {
@@ -111,7 +118,7 @@ function CopyBadge({
   );
 }
 
-function Section({ id, title, icon, children, subtitle }: any) {
+function Section({ id, title, icon, children, subtitle }: SectionProps) {
   return (
     <section id={id} className="max-w-3xl mx-auto px-4 py-12 text-center">
       <motion.div
@@ -164,7 +171,7 @@ export default function WeddingInvite() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [playing, setPlaying] = useState(false);
 
-  const [gallery, setGallery] = useState(CONFIG.gallery.images.slice(0, 6));
+  const [gallery, setGallery] = useState<string[]>(CONFIG.gallery.images.slice(0, 6));
 
   // autoplay music
   useEffect(() => {
@@ -173,34 +180,6 @@ export default function WeddingInvite() {
       setPlaying(true);
     }
   }, []);
-
-  // load guest name from Apps Script
-  useEffect(() => {
-    async function lookup() {
-      if (!guestSlug) return;
-      const base = process.env.NEXT_PUBLIC_APPSCRIPT_URL;
-      if (!base) return;
-
-      try {
-        const res = await fetch(
-          `${base}?action=getGuest&slug=${encodeURIComponent(guestSlug)}`
-        );
-        const j = await res.json();
-        if (j.found && j.name) setGuestName(j.name);
-        else
-          setGuestName(
-            guestSlug
-              .replace(/-/g, " ")
-              .replace(/\b\w/g, (c) => c.toUpperCase())
-          );
-      } catch {
-        setGuestName(
-          guestSlug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
-        );
-      }
-    }
-    lookup();
-  }, [guestSlug]);
 
   // fetch gallery from Supabase
   useEffect(() => {
@@ -216,7 +195,7 @@ export default function WeddingInvite() {
 
         if (error || !data) return;
 
-        const urls = data.map((d: any) => {
+        const urls = data.map((d: { path: string }) => {
           const { data: urlData } = supabase.storage
             .from("gallery")
             .getPublicUrl(d.path);
@@ -234,32 +213,35 @@ export default function WeddingInvite() {
   const firstEventDate = "2025-09-14T00:09:00";
 
   async function submitRSVP() {
-    setSending(true);
+  setSending(true);
 
-    try {
-      const appsUrl = process.env.NEXT_PUBLIC_APPSCRIPT_URL;
-      const payload = { ...rsvp, slug: guestSlug || "" };
+  try {
+    const appsUrl = process.env.NEXT_PUBLIC_APPSCRIPT_URL;
 
-      if (appsUrl) {
-        const res = await fetch(appsUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
-        const j = await res.json();
-        if (j.success !== false) setSent(true);
-      } else {
-        const queue = JSON.parse(localStorage.getItem("rsvp_local") || "[]");
-        queue.push({ ...payload, timestamp: new Date().toISOString() });
-        localStorage.setItem("rsvp_local", JSON.stringify(queue));
-        setSent(true);
-      }
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setSending(false);
+    if (appsUrl && typeof appsUrl === "string" && appsUrl.startsWith("http")) {
+      const payload = { ...rsvp, timestamp: new Date().toISOString() };
+      const res = await fetch(appsUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const j = await res.json();
+      if (j.success !== false) setSent(true);
+    } else {
+      console.warn("Apps Script URL tidak ditemukan, menyimpan ke localStorage");
+      const queue = JSON.parse(localStorage.getItem("rsvp_local") || "[]");
+      queue.push({ ...rsvp, timestamp: new Date().toISOString() });
+      localStorage.setItem("rsvp_local", JSON.stringify(queue));
+      setSent(true);
     }
+  } catch (e) {
+    console.error("Error submitRSVP:", e);
+  } finally {
+    setSending(false);
   }
+}
+
 
   const shareUrl = typeof window !== "undefined" ? window.location.href : "";
 
@@ -283,7 +265,7 @@ export default function WeddingInvite() {
           style={{ y }}
           className="relative h-[70vh] w-full overflow-hidden"
         >
-          <img
+          <Image
             src={CONFIG.couple.cover}
             alt="cover"
             className="absolute inset-0 h-full w-full object-cover"
@@ -503,7 +485,7 @@ export default function WeddingInvite() {
                     <Input
                       placeholder="Nama lengkap"
                       value={rsvp.name}
-                      onChange={(e: any) =>
+                      onChange={(e:  React.ChangeEvent<HTMLInputElement>) =>
                         setRsvp({ ...rsvp, name: e.target.value })
                       }
                     />
@@ -514,7 +496,7 @@ export default function WeddingInvite() {
                       <Input
                         placeholder="08xxxxxxxxxx"
                         value={rsvp.phone}
-                        onChange={(e: any) =>
+                        onChange={(e:  React.ChangeEvent<HTMLInputElement>) =>
                           setRsvp({ ...rsvp, phone: e.target.value })
                         }
                       />
@@ -539,7 +521,7 @@ export default function WeddingInvite() {
                       type="number"
                       min={1}
                       value={rsvp.attendees}
-                      onChange={(e: any) =>
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                         setRsvp({ ...rsvp, attendees: Number(e.target.value) })
                       }
                     />
@@ -549,7 +531,7 @@ export default function WeddingInvite() {
                     <select
                       className="w-full h-10 rounded-md border px-3"
                       value={rsvp.status}
-                      onChange={(e: any) =>
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                         setRsvp({ ...rsvp, status: e.target.value })
                       }
                     >
@@ -563,7 +545,7 @@ export default function WeddingInvite() {
                     <Textarea
                       placeholder={`Ucapan untuk ${CONFIG.couple.bride.name} & ${CONFIG.couple.groom.name}`}
                       value={rsvp.message}
-                      onChange={(e: any) =>
+                      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
                         setRsvp({ ...rsvp, message: e.target.value })
                       }
                     />
