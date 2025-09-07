@@ -6,13 +6,14 @@ import { useScroll, useTransform } from "framer-motion";
 import CONFIG from "@/config";
 
 // Sections
-import Hero from "@/components/Hero";
+// import Hero from "@/components/Hero";
 import Couple from "@/components/Couple";
 import Events from "@/components/Events";
 import RsvpForm from "@/components/RsvpForm";
 import Gallery from "@/components/Gallery";
 import GiftSection from "@/components/GiftSection";
 import Footer from "@/components/Footer";
+import VideoHero from "@/components/VideoHero";
 
 // Floating Component
 import MusicPlayer from "@/components/MusicPlayer";
@@ -55,15 +56,12 @@ export default function GuestPage({ params }: { params: { slug: string } }) {
           backgroundPosition: "center",
         }}
       >
-        {/* Hero Section */}
-        <Hero
-          y={y}
-          guestName={guestName}
-          firstEventDate={firstEventDate}
-          audioRef={audioRef}
-          playing={playing}
-          setPlaying={setPlaying}
-        />
+         {/* Hero pakai video */}
+      <VideoHero
+        videoUrl="https://cfsoedqtdrmqptfcudra.supabase.co/storage/v1/object/sign/assets/VideoHero.mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9mOGI5MGI1MS0wYzA1LTRkNTAtYmFkMS1jOWNiM2M4NWIzYTEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhc3NldHMvVmlkZW9IZXJvLm1wNCIsImlhdCI6MTc1NzI0ODM5MiwiZXhwIjoxNzg4Nzg0MzkyfQ.Kwn5EnY2SYp9gFvkOlvnQj-kk7TVOP1PUVj__CqrRII"
+        // guestName={guestName}
+        // eventDate={firstEventDate}
+      />
 
         {/* Couple Section */}
         <Couple />
