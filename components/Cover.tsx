@@ -1,5 +1,6 @@
 "use client";
 
+<<<<<<< HEAD
 import { useState } from "react";
 import { motion } from "framer-motion";
 
@@ -30,6 +31,47 @@ export default function Cover({ onOpen }: CoverProps) {
           } transition-colors`}
         >
           BUKA UNDANGAN
+=======
+import { motion } from "framer-motion";
+
+interface CoverProps {
+  guestName?: string;
+  eventDate: string;
+  onOpen: () => void;
+}
+
+export default function Cover({ guestName = "Tamu Undangan", eventDate, onOpen }: CoverProps) {
+  return (
+    <div
+      className="relative min-h-screen flex flex-col items-center justify-center text-center bg-gradient-to-b from-pink-50 to-white"
+      style={{
+        backgroundImage: "url('/cover.jpg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-black/40" />
+
+      {/* Content */}
+      <motion.div
+        className="relative z-10 px-6 max-w-xl"
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+      >
+        <h1 className="text-3xl font-bold text-white">Undangan Syukuran Pernikahan</h1>
+        <h1 className="text-2xl font-bold text-white">Salma & Zakki</h1>
+        <p className="mt-4 text-white/90">Kepada Yth.</p>
+        <p className="text-2xl font-semibold text-white">{guestName}</p>
+        <p className="mt-2 text-white/70">{eventDate}</p>
+
+        <button
+          onClick={onOpen}
+          className="mt-6 px-6 py-3 bg-white text-black font-medium rounded-xl shadow-md hover:bg-neutral-100 transition"
+        >
+          Buka Undangan
+>>>>>>> e11ec40 (kelengkapan kosmetik + gallery + videohero)
         </button>
       </motion.div>
     </div>

@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import CONFIG from "@/config";
 import Section from "./Section";
 import { Users } from "lucide-react";
 import { createClient } from "@supabase/supabase-js";
@@ -14,19 +13,20 @@ const supabase = (() => {
 })();
 
 export default function Gallery() {
-  const [gallery, setGallery] = useState<string[]>(CONFIG.gallery.images);
+  const [gallery, setGallery] = useState<string[]>([]);
 
   useEffect(() => {
     async function fetchGallery() {
       if (!supabase) return;
-      const { data } = await supabase.from("gallery").select("path").limit(12);
-      if (data) {
-        const urls = data.map((d: { path: string }) =>
-          supabase.storage.from("gallery").getPublicUrl(d.path).data.publicUrl
-        );
-        setGallery(urls);
-      }
+
+      // Generate URL dari 1.jpeg sampai 15.jpeg
+      const urls = Array.from({ length: 15 }, (_, i) =>
+        supabase.storage.from("gallery").getPublicUrl(`${i + 1}.jpeg`).data.publicUrl
+      );
+
+      setGallery(urls);
     }
+
     fetchGallery();
   }, []);
 
@@ -39,7 +39,7 @@ export default function Gallery() {
           <motion.img
             key={i}
             src={src}
-            alt={`gallery-${i}`}
+            alt={`gallery-${i + 1}`}
             className="w-full h-44 md:h-56 object-cover rounded-2xl cursor-pointer shadow-sm"
             whileHover={{ scale: 1.02 }}
             onClick={() => window.open(src, "_blank")}

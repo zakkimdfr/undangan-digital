@@ -14,6 +14,9 @@ export default function Footer() {
         © {new Date().getFullYear()} {CONFIG.couple.bride.name} &{" "}
         {CONFIG.couple.groom.name}
       </div>
+      <div className="mt-2">
+        <span>Developed and Published by Zakki</span>
+      </div>
     </footer>
   );
 }

@@ -28,7 +28,7 @@ export default function Couple() {
                 rel="noopener noreferrer"
                 className="text-pink-400 hover:underline flex items-center justify-center gap-1"
               >
-                <Instagram className="h-4 w-4" /> Instagram
+                <Instagram className="h-4 w-4" /> Instagram Salma
               </a>
             )}
           </div>
@@ -51,7 +51,7 @@ export default function Couple() {
                 rel="noopener noreferrer"
                 className="text-blue-400 hover:underline flex items-center justify-center gap-1"
               >
-                <Instagram className="h-4 w-4" /> Instagram
+                <Instagram className="h-4 w-4" /> Instagram Zakki
               </a>
             )}
           </div>
