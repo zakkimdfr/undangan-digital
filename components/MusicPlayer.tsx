@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Music2 } from "lucide-react";
-import { RefObject } from "react";
+import { RefObject, useEffect } from "react";
 
 type MusicPlayerProps = {
   audioRef: RefObject<HTMLAudioElement | null>;
@@ -15,6 +15,18 @@ export default function MusicPlayer({
   playing,
   setPlaying,
 }: MusicPlayerProps) {
+  // Auto-play saat mount
+  useEffect(() => {
+    const a = audioRef.current;
+    if (!a) return;
+    a.play()
+      .then(() => setPlaying(true))
+      .catch(() => {
+        // Jika browser blokir auto-play, tetap false
+        setPlaying(false);
+      });
+  }, [audioRef, setPlaying]);
+
   return (
     <div className="fixed bottom-5 right-5 z-50">
       <Button
