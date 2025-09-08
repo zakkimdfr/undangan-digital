@@ -22,7 +22,8 @@ import Cover from "@/components/Cover";
 
 export default function GuestPage({ params }: { params: { slug: string } }) {
   const [open, setOpen] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  // const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioRef = useRef<HTMLAudioElement>(null!); // ✅ paksa non-null
   const [playing, setPlaying] = useState(false);
 
   // Scroll animation for hero parallax
@@ -89,6 +90,10 @@ export default function GuestPage({ params }: { params: { slug: string } }) {
         {/* Footer */}
         <Footer />
       </div>
+
+      {/* Audio element */}
+      <audio ref={audioRef} src="/music.mp3" loop preload="auto" />
+      
     </div>
   );
 }

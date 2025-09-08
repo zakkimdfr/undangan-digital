@@ -30,3 +30,5 @@ export default function Section({ id, title, icon, children, subtitle }: Section
     </section>
   );
 }
+
+

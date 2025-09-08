@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   images: {
     domains: [
-      "cfsoedqtdrmqptfcudra.supabase.co", // ganti sesuai domain supabase kamu
+      "cfsoedqtdrmqptfcudra.supabase.co", 
     ],
   },
 };
