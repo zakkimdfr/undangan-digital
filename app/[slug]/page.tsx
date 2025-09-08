@@ -6,7 +6,6 @@ import { useScroll, useTransform } from "framer-motion";
 import CONFIG from "@/config";
 
 // Sections
-// import Hero from "@/components/Hero";
 import Couple from "@/components/Couple";
 import Events from "@/components/Events";
 import RsvpForm from "@/components/RsvpForm";
@@ -23,8 +22,7 @@ import Cover from "@/components/Cover";
 
 export default function GuestPage({ params }: { params: { slug: string } }) {
   const [open, setOpen] = useState(false);
-  // const audioRef = useRef<HTMLAudioElement | null>(null);
-  const audioRef = useRef<HTMLAudioElement>(null!); // ✅ paksa non-null
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const [playing, setPlaying] = useState(false);
 
   // Scroll animation for hero parallax
@@ -49,19 +47,18 @@ export default function GuestPage({ params }: { params: { slug: string } }) {
     <div className="min-h-screen text-neutral-100 relative">
       {/* Background */}
       <div
-        className="min-h-screen bg-gradient-to-b from-white to-neutral-50 text-neutral-800"
+        className="min-h-screen text-neutral-800"
         style={{
-          backgroundImage: "url('/bg-pattern.jpg')",
+          background: `
+      linear-gradient(rgba(189,213,170,0.5), rgba(189,213,170,0.5)),
+      url('/bg-pattern.jpg')
+    `,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
       >
-         {/* Hero pakai video */}
-      <VideoHero
-        videoUrl="https://cfsoedqtdrmqptfcudra.supabase.co/storage/v1/object/sign/assets/VideoHero.mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9mOGI5MGI1MS0wYzA1LTRkNTAtYmFkMS1jOWNiM2M4NWIzYTEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhc3NldHMvVmlkZW9IZXJvLm1wNCIsImlhdCI6MTc1NzI0ODM5MiwiZXhwIjoxNzg4Nzg0MzkyfQ.Kwn5EnY2SYp9gFvkOlvnQj-kk7TVOP1PUVj__CqrRII"
-        // guestName={guestName}
-        // eventDate={firstEventDate}
-      />
+        {/* Hero pakai video */}
+        <VideoHero videoUrl="https://cfsoedqtdrmqptfcudra.supabase.co/storage/v1/object/sign/assets/VideoHero.mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9mOGI5MGI1MS0wYzA1LTRkNTAtYmFkMS1jOWNiM2M4NWIzYTEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhc3NldHMvVmlkZW9IZXJvLm1wNCIsImlhdCI6MTc1NzI0ODM5MiwiZXhwIjoxNzg4Nzg0MzkyfQ.Kwn5EnY2SYp9gFvkOlvnQj-kk7TVOP1PUVj__CqrRII" />
 
         {/* Couple Section */}
         <Couple />
@@ -88,10 +85,6 @@ export default function GuestPage({ params }: { params: { slug: string } }) {
         {/* Footer */}
         <Footer />
       </div>
-
-      {/* Audio element */}
-      <audio ref={audioRef} src="/music.mp3" loop preload="auto" />
-      
     </div>
   );
 }
