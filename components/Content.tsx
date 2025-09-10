@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import type { Variants } from "framer-motion";
-import CONFIG from "@/config";
+// import CONFIG from "@/config";
 
 // Sections
 import Couple from "@/components/Couple";
@@ -28,7 +28,7 @@ export default function Content({ guestName }: { guestName?: string }) {
   const audioRef = useRef<HTMLAudioElement>(null!);
   const [playing, setPlaying] = useState(false);
 
-  const firstEventDate = CONFIG.events[0].date;
+  // const firstEventDate = CONFIG.events[0].date;
 
   // 🎵 fungsi buka undangan + play musik
   const handleOpen = () => {
@@ -61,7 +61,7 @@ export default function Content({ guestName }: { guestName?: string }) {
       {!open ? (
         <Cover
           guestName={guestName ?? "Tamu Undangan"}
-          eventDate={firstEventDate}
+          // eventDate={firstEventDate}
           onOpen={handleOpen}
           audioRef={audioRef}
           setPlaying={setPlaying}
