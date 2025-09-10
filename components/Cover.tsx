@@ -1,10 +1,11 @@
 "use client";
+// import CONFIG from "@/config";
 import { motion } from "framer-motion";
 import { RefObject, useState } from "react";
 
 interface CoverProps {
   guestName?: string;
-  eventDate: string;
+  // eventDate: string;
   onOpen: () => void;
   audioRef: RefObject<HTMLAudioElement>;
   setPlaying: (value: boolean) => void;
@@ -12,7 +13,7 @@ interface CoverProps {
 
 export default function Cover({
   guestName = "Tamu Undangan",
-  eventDate,
+  // eventDate,
   onOpen,
   audioRef,
   setPlaying,
@@ -53,10 +54,12 @@ export default function Cover({
         <h1 className="text-3xl font-bold text-white">
           Undangan Syukuran Pernikahan
         </h1>
-        <h1 className="text-2xl font-bold text-white">Salma & Zakki</h1>
+        <p className="text-5xl font-handwriting text-white-600 mt-4">
+          Salma & Zakki
+        </p>
         <p className="mt-4 text-white/90">Kepada Yth.</p>
         <p className="text-2xl font-semibold text-white">{guestName}</p>
-        <p className="mt-2 text-white/70">{eventDate}</p>
+        <p className="mt-2 text-white/70">14 September 2025</p>
 
         <button
           onClick={handleClick}

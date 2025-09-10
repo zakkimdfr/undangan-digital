@@ -44,13 +44,13 @@ export default function ThankYou() {
             </div>
 
             {/* Text */}
-            <p className="text-xl text-neutral-700 whitespace-pre-line">
+            <p className="text-sm text-neutral-700 whitespace-pre-line">
               {/* Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Anda
               berkenan hadir dan memberikan do&apos;a restunya atas pernikahan
               kami. */}
               {CONFIG.thankyou.text1}
             </p>
-            <p className="text-xl text-neutral-700 whitespace-pre-line">
+            <p className="text-sm text-neutral-700 whitespace-pre-line">
               {/* Atas do&apos;a dan restunya{"\n"}Kami ucapkan Terima Kasih. */}
               {CONFIG.thankyou.text2    }
             </p>

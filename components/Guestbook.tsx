@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card"; // Hanya butuh Card, bukan CardContent
 import Section from "./Section";
 import { BookOpen } from "lucide-react";
 import { createClient } from "@supabase/supabase-js";
@@ -23,11 +23,11 @@ export default function Guestbook() {
   const [entries, setEntries] = useState<GuestbookEntry[]>([]);
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchEntries();
 
-    // subscribe realtime
     const channel = supabase
       .channel("guestbook-changes")
       .on(
@@ -45,19 +45,35 @@ export default function Guestbook() {
   }, []);
 
   async function fetchEntries() {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from("guestbook")
       .select("*")
       .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("Error fetching guestbook:", error.message);
+      return;
+    }
     if (data) setEntries(data as GuestbookEntry[]);
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!name || !message) return;
-    await supabase.from("guestbook").insert([{ name, message }]);
-    setName("");
-    setMessage("");
+    if (!name.trim() || !message.trim()) return;
+    setLoading(true);
+
+    const { error } = await supabase
+      .from("guestbook")
+      .insert([{ name, message }]);
+
+    if (error) {
+      console.error("Error inserting guestbook entry:", error.message);
+    } else {
+      setName("");
+      setMessage("");
+    }
+
+    setLoading(false);
   }
 
   return (
@@ -66,9 +82,13 @@ export default function Guestbook() {
       title="Buku Tamu"
       icon={<BookOpen className="h-5 w-5" />}
     >
-      <Card className="rounded-2xl max-h-[500px] flex flex-col">
-        <CardContent className="p-6 space-y-4 flex-1 flex flex-col">
-          {/* Form input */}
+      {/* ===========================================
+        PERUBAHAN UTAMA ADA DI SINI 
+        ===========================================
+      */}
+      <Card className="rounded-2xl h-[500px] flex flex-col">
+        {/* Bagian Form (Ukuran statis) */}
+        <div className="p-6 border-b">
           <form
             onSubmit={handleSubmit}
             className="flex flex-col md:flex-row gap-2"
@@ -79,6 +99,7 @@ export default function Guestbook() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="flex-1 px-3 py-2 border rounded-lg text-sm"
+              disabled={loading}
             />
             <input
               type="text"
@@ -86,38 +107,41 @@ export default function Guestbook() {
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               className="flex-1 px-3 py-2 border rounded-lg text-sm"
+              disabled={loading}
             />
             <button
               type="submit"
-              className="px-4 py-2 bg-black text-white rounded-lg text-sm"
+              disabled={loading}
+              className="px-4 py-2 bg-black text-white rounded-lg text-sm disabled:opacity-50"
             >
-              Kirim
+              {loading ? "Mengirim..." : "Kirim"}
             </button>
           </form>
+        </div>
 
-          {/* Daftar komentar */}
-          <div className="overflow-y-auto flex-1 space-y-3 pr-2">
-            {entries.map((entry) => (
-              <div
-                key={entry.id}
-                className="p-3 border rounded-lg bg-neutral-50"
-              >
-                <div className="flex justify-between items-center text-sm font-medium">
-                  <span>{entry.name}</span>
-                </div>
-
-                <p className="text-sm mt-1">{entry.message}</p>
-
-                <div className="text-xs text-neutral-500 mt-2 text-left">
-                  {formatDistanceToNow(new Date(entry.created_at), {
-                    addSuffix: true,
-                    locale: id,
-                  })}
-                </div>
+        {/* Bagian Daftar Komentar (Fleksibel dan bisa scroll) */}
+        <div className="flex-1 overflow-y-auto p-6 space-y-3">
+          {entries.length === 0 && !loading && (
+            <p className="text-sm text-neutral-500 text-center pt-4">
+              Belum ada ucapan, jadilah yang pertama! 🎉
+            </p>
+          )}
+          {entries.map((entry) => (
+            <div
+              key={entry.id}
+              className="p-3 border rounded-lg bg-neutral-50 text-left"
+            >
+              <div className="text-sm font-medium">{entry.name}</div>
+              <p className="text-sm mt-1 break-words">{entry.message}</p>
+              <div className="text-xs text-neutral-500 mt-2">
+                {formatDistanceToNow(new Date(entry.created_at), {
+                  addSuffix: true,
+                  locale: id,
+                })}
               </div>
-            ))}
-          </div>
-        </CardContent>
+            </div>
+          ))}
+        </div>
       </Card>
     </Section>
   );
