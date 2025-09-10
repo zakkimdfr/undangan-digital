@@ -6,6 +6,8 @@ import { Users, MapPin, Music2 } from "lucide-react";
 import CONFIG from "@/config";
 import Countdown from "./Countdown";
 import { RefObject } from "react";
+import Image from "next/image";
+
 
 type HeroProps = {
   y: MotionValue<number>;
@@ -31,7 +33,7 @@ export default function Hero({
     >
       {/* Background Image */}
       <div className="relative h-[70vh] w-full overflow-hidden">
-        <img
+        <Image
           src={CONFIG.couple.cover}
           alt="cover"
           className="object-cover w-full h-full"
