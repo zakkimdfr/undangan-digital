@@ -14,6 +14,8 @@ import Gallery from "@/components/Gallery";
 import GiftSection from "@/components/GiftSection";
 import Footer from "@/components/Footer";
 import VideoHero from "@/components/VideoHero";
+import Guestbook from "./Guestbook";
+import ThankYou from "./ThankYou";
 
 // Floating Component
 import MusicPlayer from "@/components/MusicPlayer";
@@ -77,7 +79,11 @@ export default function Content({ guestName }: { guestName?: string }) {
           }}
         >
           {/* Hero pakai video */}
-          <VideoHero videoUrl="/VideoHero.mp4" />
+          <VideoHero
+            videoUrl="/VideoHero.mp4"
+            webmUrl="/VideoHero.webm"
+            posterUrl="/VideoHero-poster.jpg"
+          />
 
           {/* Sections dengan animasi fade/slide */}
           <motion.section
@@ -146,6 +152,26 @@ export default function Content({ guestName }: { guestName?: string }) {
             playing={playing}
             setPlaying={setPlaying}
           />
+
+          <motion.section
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={fadeInUp}
+            className="py-5"
+          >
+            <Guestbook />
+          </motion.section>
+
+          <motion.section
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={fadeInUp}
+            className="py-5"
+          >
+            <ThankYou />
+          </motion.section>
 
           {/* Footer */}
           <Footer />

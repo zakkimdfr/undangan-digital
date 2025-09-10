@@ -3,6 +3,12 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* globals.css */
+.font-handwriting {
+  font-family: var(--font-great-vibes), cursive;
+}
+
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

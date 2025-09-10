@@ -70,6 +70,11 @@ const CONFIG = {
     images: [],
   },
   music: { autoplay: true, src: "/public/music.mp3" },
+
+  thankyou: {
+    text1: "Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Anda berkenan hadir dan memberikan do'a restunya atas pernikahan kami.",
+    text2: "Atas do'a dan restunya\nKami ucapkan Terima Kasih."
+  },
 };
 
 export default CONFIG;

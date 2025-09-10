@@ -1,6 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
-import { RefObject } from "react";
+import { RefObject, useState } from "react";
 
 interface CoverProps {
   guestName?: string;
@@ -17,18 +17,18 @@ export default function Cover({
   audioRef,
   setPlaying,
 }: CoverProps) {
-  const handleClick = () => {
-    // buka undangan
-    onOpen();
+  const [isClosing, setIsClosing] = useState(false);
 
-    // play musik
+  const handleClick = () => {
     const a = audioRef.current;
     if (a) {
-      a.muted = false; // pastikan unmute
+      a.muted = false;
       a.play()
         .then(() => setPlaying(true))
         .catch((err) => console.warn("Autoplay dicegah:", err));
     }
+
+    setIsClosing(true); // trigger transisi
   };
 
   return (
@@ -40,7 +40,7 @@ export default function Cover({
         backgroundPosition: "center",
       }}
     >
-      {/* Overlay */}
+      {/* Overlay gelap */}
       <div className="absolute inset-0 bg-black/40" />
 
       {/* Content */}
@@ -65,6 +65,17 @@ export default function Cover({
           Buka Undangan
         </button>
       </motion.div>
+
+      {/* Layer transisi */}
+      {isClosing && (
+        <motion.div
+          className="absolute inset-0 bg-white z-50"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, ease: "easeInOut" }}
+          onAnimationComplete={() => onOpen()} // buka setelah transisi selesai
+        />
+      )}
     </div>
   );
 }
