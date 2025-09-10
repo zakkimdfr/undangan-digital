@@ -1,12 +1,13 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import type { Variants } from "framer-motion";
 import CONFIG from "@/config";
 
 // Sections
 import Couple from "@/components/Couple";
+import CountdownSection from "@/components/CountdownSection";
 import Events from "@/components/Events";
 import RsvpForm from "@/components/RsvpForm";
 import Gallery from "@/components/Gallery";
@@ -40,20 +41,15 @@ export default function Content({ guestName }: { guestName?: string }) {
     }
   };
 
-  // 🌟 Parallax untuk hero
-//   const { scrollYProgress } = useScroll();
-//   const yHero = useTransform(scrollYProgress, [0, 1], ["0%", "-30%"]);
-//   const opacityHero = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
-
   // 🎬 Variants untuk animasi masuk tiap section
   const fadeInUp: Variants = {
-  hidden: { opacity: 0, y: 50 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }, // fix TS error
-  },
-};
+    hidden: { opacity: 0, y: 50 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.8, ease: [0.25, 0.1, 0.25, 1] },
+    },
+  };
 
   return (
     <div className="min-h-screen text-neutral-100 relative">
@@ -64,7 +60,7 @@ export default function Content({ guestName }: { guestName?: string }) {
         <Cover
           guestName={guestName ?? "Tamu Undangan"}
           eventDate={firstEventDate}
-          onOpen={() => setOpen(true)}
+          onOpen={handleOpen}
           audioRef={audioRef}
           setPlaying={setPlaying}
         />
@@ -102,6 +98,16 @@ export default function Content({ guestName }: { guestName?: string }) {
             className="py-5"
           >
             <Events />
+          </motion.section>
+
+          <motion.section
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={fadeInUp}
+            className="py-5"
+          >
+            <CountdownSection />
           </motion.section>
 
           <motion.section

@@ -17,6 +17,9 @@ const CONFIG = {
     hashtag: "#KiSahSelamanya",
     cover: "https://cfsoedqtdrmqptfcudra.supabase.co/storage/v1/object/sign/assets/cover.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9mOGI5MGI1MS0wYzA1LTRkNTAtYmFkMS1jOWNiM2M4NWIzYTEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhc3NldHMvY292ZXIuanBnIiwiaWF0IjoxNzU3MTU5NDI1LCJleHAiOjE3ODg2OTU0MjV9.72LIffmHvlaRKLnuLZDa5cDyQC7MgkoSAF6GFAQk_1s",
   },
+
+  countdownDate: "2025-09-14T09:30:00",
+
   events: [
     {
       type: "Akad Nikah",
@@ -27,7 +30,7 @@ const CONFIG = {
     {
       type: "Tausiyah",
       date: "2025-09-14",
-      time: "09:00 - 10:00 WIB",
+      time: "09:30 - 11:00 WIB",
       address:
         "Ust. Dr. H. Haris Muslim, Lc. MA\n\nGedung Haji Qornul Manazil, Jl. Ciganitri No. 2, Bojongsoang, Kab. Bandung 40287 ",
       mapUrl: "https://maps.app.goo.gl/FfmFUkKpT8PVXDhCA",
@@ -35,7 +38,7 @@ const CONFIG = {
     {
       type: "Resepsi",
       date: "2025-09-14",
-      time: "10:00 - 14:00 WIB",
+      time: "11:00 - 14:00 WIB",
       address:
         "Gedung Haji Qornul Manazil, Jl. Ciganitri No. 2, Bojongsoang, Kab. Bandung 40287 ",
       mapUrl: "https://maps.app.goo.gl/FfmFUkKpT8PVXDhCA",

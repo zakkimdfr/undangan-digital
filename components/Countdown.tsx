@@ -1,9 +1,20 @@
 "use client";
 import { useEffect, useState } from "react";
-import { TimerReset } from "lucide-react";
+
+type TimeLeft = {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+};
 
 export default function Countdown({ targetDate }: { targetDate: string }) {
-  const [remaining, setRemaining] = useState<string>("");
+  const [timeLeft, setTimeLeft] = useState<TimeLeft>({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
 
   useEffect(() => {
     const t = setInterval(() => {
@@ -16,16 +27,34 @@ export default function Countdown({ targetDate }: { targetDate: string }) {
       const m = Math.floor((diff / (1000 * 60)) % 60);
       const s = Math.floor((diff / 1000) % 60);
 
-      setRemaining(`${d} hari ${h} jam ${m} menit ${s} detik`);
+      setTimeLeft({ days: d, hours: h, minutes: m, seconds: s });
     }, 1000);
 
     return () => clearInterval(t);
   }, [targetDate]);
 
+  const items = [
+    { label: "Hari", value: timeLeft.days },
+    { label: "Jam", value: timeLeft.hours },
+    { label: "Menit", value: timeLeft.minutes },
+    { label: "Detik", value: timeLeft.seconds },
+  ];
+
   return (
-    <div className="flex items-center gap-2 text-sm opacity-80">
-      <TimerReset className="h-4 w-4" />
-      <span>{remaining}</span>
+    <div className="grid grid-cols-4 gap-3 text-center">
+      {items.map((item, i) => (
+        <div
+          key={i}
+          className="flex flex-col items-center justify-center bg-white/20 backdrop-blur-sm rounded-xl px-4 py-6 shadow-lg"
+        >
+          <span className="text-3xl md:text-5xl font-bold tracking-wide drop-shadow">
+            {item.value}
+          </span>
+          <span className="mt-1 text-xs md:text-sm uppercase tracking-wider">
+            {item.label}
+          </span>
+        </div>
+      ))}
     </div>
   );
 }

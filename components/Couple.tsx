@@ -20,7 +20,9 @@ export default function Couple() {
               className="mx-auto rounded-full object-cover shadow-lg"
             />
             <h3 className="text-xl font-semibold">{CONFIG.couple.bride.name}</h3>
-            <p className="text-sm opacity-80">{CONFIG.couple.bride.parents}</p>
+            <p className="text-sm opacity-80 whitespace-pre-line">
+              {CONFIG.couple.bride.parents}
+            </p>
             {CONFIG.couple.bride.insta && (
               <a
                 href={CONFIG.couple.bride.insta}
@@ -43,7 +45,9 @@ export default function Couple() {
               className="mx-auto rounded-full object-cover shadow-lg"
             />
             <h3 className="text-xl font-semibold">{CONFIG.couple.groom.name}</h3>
-            <p className="text-sm opacity-80">{CONFIG.couple.groom.parents}</p>
+            <p className="text-sm opacity-80 whitespace-pre-line">
+              {CONFIG.couple.groom.parents}
+            </p>
             {CONFIG.couple.groom.insta && (
               <a
                 href={CONFIG.couple.groom.insta}
