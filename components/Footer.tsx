@@ -15,7 +15,7 @@ export default function Footer() {
         {CONFIG.couple.groom.name}
       </div>
       <div className="mt-2">
-        <span>Developed and Published by Zakki</span>
+        <span>Developed and Published by {CONFIG.couple.groom.name}</span>
       </div>
     </footer>
   );

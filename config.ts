@@ -66,7 +66,7 @@ const CONFIG = {
     enabled: true,
     images: [],
   },
-  music: { autoplay: false, src: "https://cfsoedqtdrmqptfcudra.supabase.co/storage/v1/object/sign/assets/music.mp3?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9mOGI5MGI1MS0wYzA1LTRkNTAtYmFkMS1jOWNiM2M4NWIzYTEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhc3NldHMvbXVzaWMubXAzIiwiaWF0IjoxNzU3MTU5NzY2LCJleHAiOjE3ODg2OTU3NjZ9.dd02gKtPdXKNXh6TRjUOeBi8KbmGaLth0jS03uXdk0w" },
+  music: { autoplay: true, src: "/public/music.mp3" },
 };
 
 export default CONFIG;

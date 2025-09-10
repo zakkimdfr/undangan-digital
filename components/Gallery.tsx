@@ -3,32 +3,24 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Section from "./Section";
 import { Users } from "lucide-react";
-import { createClient } from "@supabase/supabase-js";
+// import { createClient } from "@supabase/supabase-js";
 
-const supabase = (() => {
-  if (typeof window === "undefined") return null;
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  return url && key ? createClient(url, key) : null;
-})();
+// const supabase = (() => {
+//   if (typeof window === "undefined") return null;
+//   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+//   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+//   return url && key ? createClient(url, key) : null;
+// })();
 
 export default function Gallery() {
   const [gallery, setGallery] = useState<string[]>([]);
 
   useEffect(() => {
-    async function fetchGallery() {
-      if (!supabase) return;
+  const baseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL + "/storage/v1/object/public/gallery";
+  const urls = Array.from({ length: 15 }, (_, i) => `${baseUrl}/${i + 1}.jpeg`);
+  setGallery(urls);
+}, []);
 
-      // Generate URL dari 1.jpeg sampai 15.jpeg
-      const urls = Array.from({ length: 15 }, (_, i) =>
-        supabase.storage.from("gallery").getPublicUrl(`${i + 1}.jpeg`).data.publicUrl
-      );
-
-      setGallery(urls);
-    }
-
-    fetchGallery();
-  }, []);
 
   if (!gallery.length) return null;
 
