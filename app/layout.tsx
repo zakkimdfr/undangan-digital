@@ -15,6 +15,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Undangan Syukuran Salma & Zakki",
   description: "Created by Zakki Mudhoffar",
+  icons: {
+    icon: "/icon.png",     // favicon utama
+    shortcut: "/icon.png", // untuk pinned tabs / bookmark
+    apple: "/icon.png",    // untuk iOS home screen
+  },
 };
 
 export default function RootLayout({
