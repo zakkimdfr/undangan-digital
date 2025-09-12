@@ -79,7 +79,7 @@ export default function Guestbook() {
   return (
     <Section
       id="guestbook"
-      title="Buku Tamu"
+      title="Ucapan dan Do'a"
       icon={<BookOpen className="h-5 w-5" />}
     >
       {/* ===========================================

@@ -1,6 +1,6 @@
 "use client";
-import { useState } from "react";
-import { Copy, Share2 } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Copy, Share2, X } from "lucide-react";
 
 type TemplateKey = "islami" | "gaul" | "formal";
 
@@ -38,33 +38,63 @@ export default function GeneratorPage() {
   const [names, setNames] = useState<string>("");
   const [templateKey, setTemplateKey] = useState<TemplateKey>("islami");
   const [customTemplate, setCustomTemplate] = useState<string>(defaultTemplates[templateKey]);
+  const [copiedName, setCopiedName] = useState<string | null>(null);
 
   const undanganBase = "https://undangan-digital-brown-iota.vercel.app/";
 
-  // Update custom template saat ganti pilihan
+  // Load dari localStorage
+  useEffect(() => {
+    const savedTemplate = localStorage.getItem("customTemplate");
+    if (savedTemplate) setCustomTemplate(savedTemplate);
+
+    const savedNames = localStorage.getItem("guestNames");
+    if (savedNames) setNames(savedNames);
+  }, []);
+
+  // Save ke localStorage
+  useEffect(() => {
+    localStorage.setItem("customTemplate", customTemplate);
+  }, [customTemplate]);
+
+  useEffect(() => {
+    localStorage.setItem("guestNames", names);
+  }, [names]);
+
   const handleTemplateChange = (key: TemplateKey) => {
     setTemplateKey(key);
     setCustomTemplate(defaultTemplates[key]);
   };
 
-  // Generate pesan per nama
-  const generateMessages = () => {
-    const list = names
+  // Buat list nama dari textarea
+  const getNameList = () =>
+    names
       .split("\n")
       .map((n) => n.trim())
-      .filter((n) => n.length > 0)
-      .map((n) => {
-        const slug = encodeURIComponent(n.replace(/\s+/g, "-"));
-        const link = `${undanganBase}${slug}`;
-        const text = customTemplate
-          .replace(/\$nama_tamu/g, n)
-          .replace(/\$link_undangan/g, link);
-        return { name: n, slug, text, link };
-      });
-    return list;
+      .filter((n) => n.length > 0);
+
+  const messages = getNameList().map((n) => {
+    const slug = encodeURIComponent(n.replace(/\s+/g, "-"));
+    const link = `${undanganBase}${slug}`;
+    const text = customTemplate
+      .replace(/\$nama_tamu/g, n)
+      .replace(/\$link_undangan/g, link);
+    return { name: n, slug, text, link };
+  });
+
+  const handleCopy = async (text: string, name: string) => {
+    await navigator.clipboard.writeText(text);
+    setCopiedName(name);
   };
 
-  const messages = generateMessages();
+  // Hapus 1 nama dari list
+  const handleRemove = (nameToRemove: string) => {
+    const updatedNames = getNameList().filter((n) => n !== nameToRemove).join("\n");
+    setNames(updatedNames);
+
+    if (copiedName === nameToRemove) {
+      setCopiedName(null); // reset kalau yg dihapus adalah yg dicopy
+    }
+  };
 
   return (
     <div className="p-6 max-w-4xl mx-auto space-y-6">
@@ -111,20 +141,26 @@ export default function GeneratorPage() {
       <div>
         <h2 className="text-xl font-semibold mb-2">Preview Nama Tamu</h2>
         <div className="space-y-2">
-          {messages.map((m, i) => (
+          {messages.map((m) => (
             <div
-              key={i}
+              key={m.name}
               className="flex items-center justify-between p-2 border rounded hover:shadow-sm"
             >
               <span>{m.name}</span>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => navigator.clipboard.writeText(m.text)}
-                  className="p-1 rounded hover:bg-gray-200"
-                  title="Copy pesan"
-                >
-                  <Copy className="h-5 w-5" />
-                </button>
+              <div className="flex gap-2 items-center">
+                {copiedName === m.name ? (
+                  <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
+                    Copied!
+                  </span>
+                ) : (
+                  <button
+                    onClick={() => handleCopy(m.text, m.name)}
+                    className="p-1 rounded hover:bg-gray-200"
+                    title="Copy pesan"
+                  >
+                    <Copy className="h-5 w-5" />
+                  </button>
+                )}
                 <a
                   href={`https://wa.me/?text=${encodeURIComponent(m.text)}`}
                   target="_blank"
@@ -134,9 +170,20 @@ export default function GeneratorPage() {
                 >
                   <Share2 className="h-5 w-5" />
                 </a>
+                <button
+                  onClick={() => handleRemove(m.name)}
+                  className="p-1 rounded hover:bg-red-200"
+                  title="Hapus nama tamu"
+                >
+                  <X className="h-5 w-5" />
+                </button>
               </div>
             </div>
           ))}
+
+          {messages.length === 0 && (
+            <p className="text-sm text-gray-500 italic">Belum ada nama tamu</p>
+          )}
         </div>
       </div>
     </div>

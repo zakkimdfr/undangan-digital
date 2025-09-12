@@ -3,8 +3,8 @@ import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Check, Send, Share2, Users } from "lucide-react";
+// import { Textarea } from "@/components/ui/textarea";
+import { Check, Send, Users } from "lucide-react";
 import CONFIG from "@/config";
 import Section from "./Section";
 
@@ -68,20 +68,27 @@ export default function RSVPForm() {
               placeholder="Nama"
               value={rsvp.name}
               onChange={(e) => setRsvp({ ...rsvp, name: e.target.value })}
+              required
             />
             <Input
               placeholder="No. HP"
               value={rsvp.phone}
               onChange={(e) => setRsvp({ ...rsvp, phone: e.target.value })}
+              required
             />
-            <Input
-              type="number"
-              min={1}
+            <select
               value={rsvp.attendees}
               onChange={(e) =>
                 setRsvp({ ...rsvp, attendees: Number(e.target.value) })
               }
-            />
+              className="px-3 py-2 border rounded-lg text-sm"
+            >
+              {[1, 2, 3].map((num) => (
+                <option key={num} value={num}>
+                  {num}
+                </option>
+              ))}
+            </select>
             <select
               className="w-full h-10 rounded-md border px-3"
               value={rsvp.status}
@@ -91,11 +98,6 @@ export default function RSVPForm() {
               <option>Mungkin</option>
               <option>Tidak Hadir</option>
             </select>
-            <Textarea
-              placeholder="Ucapan"
-              value={rsvp.message}
-              onChange={(e) => setRsvp({ ...rsvp, message: e.target.value })}
-            />
           </div>
           <div className="flex justify-center items-center gap-3">
             <Button disabled={sending || sent} onClick={submitRSVP}>
@@ -105,17 +107,6 @@ export default function RSVPForm() {
                 <Send className="h-4 w-4 mr-2" />
               )}{" "}
               {sent ? "Terkirim" : "Kirim RSVP"}
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={() =>
-                window.open(
-                  process.env.NEXT_PUBLIC_APPSCRIPT_URL || "",
-                  "_blank"
-                )
-              }
-            >
-              <Share2 className="h-4 w-4 mr-2" /> Lihat Data
             </Button>
           </div>
         </CardContent>
